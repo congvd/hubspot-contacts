@@ -29,20 +29,20 @@ _CANONICAL_IDENTITY_PROFILE_SCHEMA = All(
     [],
     AnyListItemValidates(
         Schema(
-            {'type': Constant(u'EMAIL'), 'value': unicode},
+            {'type': Constant('EMAIL'), 'value': str},
             required=True,
             extra=True,
             ),
         ),
     )
 
-_IS_PROPERTY_VALUE = Schema({'value': unicode}, required=True, extra=True)
+_IS_PROPERTY_VALUE = Schema({'value': str}, required=True, extra=True)
 
 CONTACT_SCHEMA = Schema(
     {
         'vid': int,
         'properties': DynamicDictionary(
-            unicode,
+            str,
             All(_IS_PROPERTY_VALUE, GetDictValue('value')),
             ),
         'identity-profiles': All(
