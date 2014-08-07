@@ -61,6 +61,7 @@ ContactList = Record.create_type(
     'id',
     'name',
     'is_dynamic',
+    'meta'
     )
 
 
@@ -134,6 +135,7 @@ def _build_contact_list_from_data(contact_list_data):
         contact_list_data['listId'],
         contact_list_data['name'],
         contact_list_data['dynamic'],
+        contact_list_data['metaData'],
         )
     return contact_list
 
