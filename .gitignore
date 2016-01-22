@@ -1,0 +1,36 @@
+# Files
+
+*.pyc
+*~
+.coverage
+.DS_Store
+._*
+coverage.xml
+
+# Directories
+
+.settings/
+.idea/
+hubspot_contacts.egg-info/
+
+# Ignore IntelliJ workspace files.
+# These contain developer-specific state such as which windows are open
+# in IntelliJ so they should never be checked in.
+*.iws
+
+# Ignore IntelliJ project and module files.
+# Don't want to check these in until I'm happy that the IntelliJ project
+# is working properly. May remove these ignores later so I can check them.
+*.iml
+*.ipr
+
+.settings/org.eclipse.ltk.core.refactoring.prefs
+
+.pydevproject
+
+.project
+
+.\#*
+\#*\#
+~     
+
