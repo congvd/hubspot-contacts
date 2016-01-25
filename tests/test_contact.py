@@ -32,7 +32,7 @@ class TestSavingContact(object):
 
     def test_invalid_property_raises_hubspot_client_error(self):
         contact = make_contact(None, properties={'is_polite': 'notavalidinput'})
-        connection = self._make_connection_for_contact_with_exception(contact, HubspotClientError("Property notavalidinput is invalid", "request-id", None))
+        connection = self._make_connection_for_contact_with_exception(contact, HubspotClientError("Property notavalidinput is invalid", "request-id"))
 
         with assert_raises(HubspotClientError) as context:
             with connection:
