@@ -50,6 +50,7 @@ from hubspot.contacts.request_data_formatters.properties import \
     format_data_for_property
 from hubspot.contacts.request_data_formatters.property_groups import \
     format_data_for_property_group as format_request_data_for_property_group
+import json
 
 
 STUB_LAST_MODIFIED_DATETIME = datetime.now().replace(microsecond=0)
@@ -589,7 +590,7 @@ class SaveContact(object):
                 CONTACTS_API_SCRIPT_NAME + '/contact/',
                 'POST',
                 request_body_deserialization=request_body_deserialization,
-                response_body_deserialization='{"vid": %s }' % self._vid,
+                response_body_deserialization={'vid': self._vid },
                 )
         api_calls.append(api_call)
 
