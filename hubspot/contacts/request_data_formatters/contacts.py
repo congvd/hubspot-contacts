@@ -32,7 +32,7 @@ from hubspot.contacts.properties import NumberProperty
 def format_contacts_data_for_saving(contacts, property_type_by_property_name):
     contacts_data = []
     for contact in contacts:
-        contact_data = _format_contact_data_for_saving(
+        contact_data = format_contact_data_for_saving(
             contact,
             property_type_by_property_name,
             )
@@ -40,7 +40,7 @@ def format_contacts_data_for_saving(contacts, property_type_by_property_name):
     return contacts_data
 
 
-def _format_contact_data_for_saving(contact, property_type_by_property_name):
+def format_contact_data_for_saving(contact, property_type_by_property_name):
     properties_data = _format_contact_properties_for_saving(
         contact.properties,
         property_type_by_property_name,

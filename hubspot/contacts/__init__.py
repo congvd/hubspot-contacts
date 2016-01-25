@@ -23,7 +23,7 @@ from hubspot.contacts._constants import CONTACTS_API_SCRIPT_NAME
 from hubspot.contacts._property_utils import get_property_type_by_property_name
 from hubspot.contacts.generic_utils import ipaginate
 from hubspot.contacts.request_data_formatters.contacts import \
-    format_contacts_data_for_saving
+    format_contact_data_for_saving, format_contacts_data_for_saving
 
 
 Contact = Record.create_type(
@@ -37,6 +37,7 @@ Contact = Record.create_type(
 
 
 _CONTACTS_SAVING_URL_PATH = CONTACTS_API_SCRIPT_NAME + '/contact/batch/'
+_CONTACT_CREATING_URL_PATH = CONTACTS_API_SCRIPT_NAME + '/contact/'
 
 
 def save_contacts(contacts, connection):
@@ -78,3 +79,16 @@ def save_contacts(contacts, connection):
             _CONTACTS_SAVING_URL_PATH,
             contacts_batch_data,
             )
+
+def save_contact(contact, connection):
+    property_type_by_property_name = \
+        get_property_type_by_property_name(connection)
+    contact_data = format_contact_data_for_saving(
+            contact,
+            property_type_by_property_name,
+            )
+    response = connection.send_post_request(
+            _CONTACT_CREATING_URL_PATH,
+            contact_data,
+            )
+    return response["vid"]
