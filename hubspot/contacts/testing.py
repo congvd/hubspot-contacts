@@ -597,6 +597,49 @@ class SaveContact(object):
         return api_calls
 
 
+class SaveContactClientError(object):
+    """
+    Simulator for an unsuccessful POST to /contacts/v1/contact due to client error
+    """
+
+    def __init__(self, contact, exception, available_properties):
+        """
+
+        :param iterable contact: Contact expected to be saved
+        :param int exception: exception to raise
+        :param iterable available_properties:
+            :class:`~hubspot.contacts.properties.Property` instances for all
+            the properties supposedly defined in the portal
+
+        """
+        super(SaveContactClientError, self).__init__()
+
+        self._contact = contact
+        self._exception = exception
+
+        self._property_type_by_property_name = \
+            {p.name: p.__class__ for p in available_properties}
+        self._available_properties_simulator = \
+            GetAllProperties(available_properties)
+
+    def __call__(self):
+        api_calls = self._available_properties_simulator()
+
+        request_body_deserialization = format_contact_data_for_saving(
+                self._contact,
+                self._property_type_by_property_name,
+        )
+        api_call = UnsuccessfulAPICall(
+                CONTACTS_API_SCRIPT_NAME + '/contact/',
+                'POST',
+                request_body_deserialization=request_body_deserialization,
+                exception=self._exception
+                )
+        api_calls.append(api_call)
+
+        return api_calls
+
+
 class SaveContacts(object):
     """
     Simulator for a successful call to :func:`~hubspot.contacts.save_contacts`.
