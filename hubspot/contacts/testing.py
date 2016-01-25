@@ -45,7 +45,7 @@ from hubspot.contacts.generic_utils import get_uuid4_str
 from hubspot.contacts.generic_utils import paginate
 from hubspot.contacts.properties import DatetimeProperty
 from hubspot.contacts.request_data_formatters.contacts import \
-    format_contacts_data_for_saving
+    format_contact_data_for_saving, format_contacts_data_for_saving
 from hubspot.contacts.request_data_formatters.properties import \
     format_data_for_property
 from hubspot.contacts.request_data_formatters.property_groups import \
@@ -551,6 +551,49 @@ class GetAllContactsByLastUpdate(GetAllContacts):
 
 UnsuccessfulGetAllContactsByLastUpdate = \
     partial(_UnsucessfulContactRetrievalSimulator, GetAllContactsByLastUpdate)
+
+
+class SaveContact(object):
+    """
+    Simulator for a successful POST to /contacts/v1/contact
+    """
+
+    def __init__(self, vid, contact, available_properties):
+        """
+
+        :param int vid: vid to be returned
+        :param iterable contact: Contact expected to be saved
+        :param iterable available_properties:
+            :class:`~hubspot.contacts.properties.Property` instances for all
+            the properties supposedly defined in the portal
+
+        """
+        super(SaveContact, self).__init__()
+
+        self._vid = vid
+        self._contact = contact
+
+        self._property_type_by_property_name = \
+            {p.name: p.__class__ for p in available_properties}
+        self._available_properties_simulator = \
+            GetAllProperties(available_properties)
+
+    def __call__(self):
+        api_calls = self._available_properties_simulator()
+
+        request_body_deserialization = format_contact_data_for_saving(
+                self._contact,
+                self._property_type_by_property_name,
+                )
+        api_call = SuccessfulAPICall(
+                CONTACTS_API_SCRIPT_NAME + '/contact/',
+                'POST',
+                request_body_deserialization=request_body_deserialization,
+                response_body_deserialization='{"vid": %s }' % self._vid,
+                )
+        api_calls.append(api_call)
+
+        return api_calls
 
 
 class SaveContacts(object):
