@@ -24,7 +24,6 @@ from hubspot.contacts._property_utils import get_property_type_by_property_name
 from hubspot.contacts.generic_utils import ipaginate
 from hubspot.contacts.request_data_formatters.contacts import \
     format_contact_data_for_saving, format_contacts_data_for_saving
-import json
 
 
 Contact = Record.create_type(
@@ -92,5 +91,4 @@ def save_contact(contact, connection):
             _CONTACT_CREATING_URL_PATH,
             contact_data,
             )
-    response_data = json.loads(response)
-    return response_data["vid"]
+    return response["vid"]
