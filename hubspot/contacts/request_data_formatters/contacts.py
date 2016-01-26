@@ -51,6 +51,16 @@ def format_contact_data_for_saving(contact, property_type_by_property_name):
         }
     return contact_data
 
+def format_contact_properties_for_saving(properties, property_type_by_property_name):
+    properties_data = _format_contact_properties_for_saving(
+            properties,
+            property_type_by_property_name,
+    )
+    properties_data = {
+        'properties': properties_data
+    }
+    return properties_data
+
 
 def _format_contact_properties_for_saving(
     contact_properties,
