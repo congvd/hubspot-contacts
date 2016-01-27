@@ -18,9 +18,8 @@ class TestSaveContact(object):
 
     def test_save_single_contact(self):
         contact = make_contact(None)
-        connection = self._make_connection_for_contact(1, contact)
-
-        vid = save_contact(contact, connection)
+        with self._make_connection_for_contact(1, contact) as connection:
+            vid = save_contact(contact, connection)
 
         eq_(1, vid)
 
@@ -33,10 +32,10 @@ class TestSaveContact(object):
 
     def test_invalid_property_raises_hubspot_client_error(self):
         contact = make_contact(None, properties={'is_polite': 'notavalidinput'})
-        connection = self._make_connection_for_contact_with_exception(contact, HubspotClientError("Property notavalidinput is invalid", "request-id"))
-
         with assert_raises(HubspotClientError) as context:
-            with connection:
+            with self._make_connection_for_contact_with_exception(
+                    contact,
+                    HubspotClientError("Property notavalidinput is invalid", "request-id")) as connection:
                 save_contact(contact, connection)
         eq_(context.exception.message, "Property notavalidinput is invalid")
 
@@ -52,9 +51,8 @@ class TestUpdateContact(object):
 
     def test_update_single_contact(self):
         contact = make_contact(1)
-        connection = self._make_connection_for_contact(contact)
-
-        update_contact(contact, connection)
+        with self._make_connection_for_contact(contact) as connection:
+            update_contact(contact, connection)
 
     @staticmethod
     def _make_connection_for_contact(contact, available_property=None):
