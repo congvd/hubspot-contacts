@@ -82,6 +82,7 @@ def save_contacts(contacts, connection):
             contacts_batch_data,
             )
 
+
 def save_contact(contact, connection):
     property_type_by_property_name = \
         get_property_type_by_property_name(connection)
@@ -94,6 +95,7 @@ def save_contact(contact, connection):
             contact_data,
             )
     return response["vid"]
+
 
 def update_contact(contact, connection):
     property_type_by_property_name = \
