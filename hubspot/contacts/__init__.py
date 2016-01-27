@@ -105,7 +105,7 @@ def update_contact(contact, connection):
             property_type_by_property_name,
     )
     path = _CONTACT_UPDATING_URL_TEMPLATE.format(contact_id=contact.vid)
-    response = connection.send_post_request(
+    connection.send_post_request(
             path,
             properties_data,
     )
