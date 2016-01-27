@@ -83,7 +83,7 @@ def save_contacts(contacts, connection):
             )
 
 
-def save_contact(contact, connection):
+def create_contact(contact, connection):
     property_type_by_property_name = \
         get_property_type_by_property_name(connection)
     contact_data = format_contact_data_for_saving(
