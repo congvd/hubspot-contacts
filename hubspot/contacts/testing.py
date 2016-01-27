@@ -555,7 +555,7 @@ UnsuccessfulGetAllContactsByLastUpdate = \
     partial(_UnsucessfulContactRetrievalSimulator, GetAllContactsByLastUpdate)
 
 
-class SaveContact(object):
+class CreateContact(object):
     """
     Simulator for a successful POST to /contacts/v1/contact
     """
@@ -570,7 +570,7 @@ class SaveContact(object):
             the properties supposedly defined in the portal
 
         """
-        super(SaveContact, self).__init__()
+        super(CreateContact, self).__init__()
 
         self._vid = vid
         self._contact = contact
@@ -598,9 +598,9 @@ class SaveContact(object):
         return api_calls
 
 
-class SaveContactClientError(object):
+class UnsuccessfulCreateContact(object):
     """
-    Simulator for an unsuccessful POST to /contacts/v1/contact due to client error
+    Simulator for an unsuccessful POST to /contacts/v1/contact
     """
 
     def __init__(self, contact, exception, available_properties):
@@ -613,7 +613,7 @@ class SaveContactClientError(object):
             the properties supposedly defined in the portal
 
         """
-        super(SaveContactClientError, self).__init__()
+        super(UnsuccessfulCreateContact, self).__init__()
 
         self._contact = contact
         self._exception = exception
