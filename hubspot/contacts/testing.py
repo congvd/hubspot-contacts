@@ -564,7 +564,7 @@ class CreateContact(object):
         """
 
         :param int vid: vid to be returned
-        :param iterable contact: Contact expected to be saved
+        :param iterable contact: Contact expected to be created
         :param iterable available_properties:
             :class:`~hubspot.contacts.properties.Property` instances for all
             the properties supposedly defined in the portal
@@ -606,7 +606,7 @@ class UnsuccessfulCreateContact(object):
     def __init__(self, contact, exception, available_properties):
         """
 
-        :param iterable contact: Contact expected to be saved
+        :param iterable contact: Contact expected to be created
         :param int exception: exception to raise
         :param iterable available_properties:
             :class:`~hubspot.contacts.properties.Property` instances for all
@@ -649,7 +649,7 @@ class UpdateContact(object):
     def __init__(self, contact, available_properties):
         """
 
-        :param iterable contact: Contact expected to be saved
+        :param iterable contact: Contact expected to be updated
         :param iterable available_properties:
             :class:`~hubspot.contacts.properties.Property` instances for all
             the properties supposedly defined in the portal
@@ -676,6 +676,49 @@ class UpdateContact(object):
                 'POST',
                 request_body_deserialization=request_body_deserialization,
                 response_body_deserialization=None,
+                )
+        api_calls.append(api_call)
+
+        return api_calls
+
+
+class UnsuccessfulUpdateContact(object):
+    """
+    Simulator for an unsuccessful POST to /contacts/v1/contact/vid/:contact_id/profile
+    """
+
+    def __init__(self, contact, exception, available_properties):
+        """
+
+        :param iterable contact: Contact expected to be updated
+        :param int exception: exception to raise
+        :param iterable available_properties:
+            :class:`~hubspot.contacts.properties.Property` instances for all
+            the properties supposedly defined in the portal
+
+        """
+        super(UnsuccessfulUpdateContact, self).__init__()
+
+        self._contact = contact
+        self._exception = exception
+
+        self._property_type_by_property_name = \
+            {p.name: p.__class__ for p in available_properties}
+        self._available_properties_simulator = \
+            GetAllProperties(available_properties)
+
+    def __call__(self):
+        api_calls = self._available_properties_simulator()
+
+        request_body_deserialization = format_contact_properties_for_saving(
+                self._contact.properties,
+                self._property_type_by_property_name,
+        )
+        api_call = UnsuccessfulAPICall(
+                CONTACTS_API_SCRIPT_NAME + '/contact/vid/' + str(self._contact.vid) + '/profile',
+                'POST',
+                request_body_deserialization=request_body_deserialization,
+                exception=self._exception
                 )
         api_calls.append(api_call)
 
