@@ -6,12 +6,12 @@ from nose.tools import assert_raises
 
 from hubspot.contacts import create_contact, update_contact
 from hubspot.contacts.testing import CreateContact, UnsuccessfulCreateContact, \
-    UpdateContact
+    UpdateContact, UnsuccessfulUpdateContact
 
 from tests._utils import make_contact
 from tests.test_properties import STUB_STRING_PROPERTY
 
-from hubspot.connection.exc import HubspotClientError
+from hubspot.connection.exc import HubspotClientError, HubspotServerError
 
 
 class TestCreateContact(object):
@@ -58,5 +58,27 @@ class TestUpdateContact(object):
     def _make_connection_for_contact(contact, available_property=None):
         available_property = available_property or STUB_STRING_PROPERTY
         simulator = UpdateContact(contact, [available_property])
+        connection = MockPortalConnection(simulator)
+        return connection
+
+
+class TestUnsuccessfullyUpdatingContact(object):
+
+    _STUB_EXCEPTION = HubspotServerError('Internal server error', 500)
+
+    def test_unsuccessfully_save_contact(self):
+        contact = make_contact(1)
+        with self._make_connection_for_contact(contact) as connection:
+            with assert_raises(HubspotServerError) as context_manager:
+                update_contact(contact, connection)
+
+        eq_(self._STUB_EXCEPTION, context_manager.exception)
+
+    @classmethod
+    def _make_connection_for_contact(cls, contact):
+        simulator = UnsuccessfulUpdateContact(
+            contact,
+            cls._STUB_EXCEPTION,
+            [STUB_STRING_PROPERTY])
         connection = MockPortalConnection(simulator)
         return connection
