@@ -23,7 +23,7 @@ from hubspot.contacts.properties import PROPERTY_TYPE_BY_NAME
 _PROPERTY_RESPONSE_SCHEMA_DEFINITION = {
     'name': str,
     'type': Any(*list(PROPERTY_TYPE_BY_NAME.keys())),
-    'options': [],
+    'options': list,
     }
 
 CREATE_PROPERTY_RESPONSE_SCHEMA = Schema(
