@@ -79,20 +79,15 @@ def save_contacts(contacts, connection):
     property_type_by_property_name = \
         get_property_type_by_property_name(connection)
 
-    responses = []
-
     for contacts_batch in chain([contacts_first_batch], contacts_batches):
         contacts_batch_data = format_contacts_data_for_saving(
             contacts_batch,
             property_type_by_property_name,
             )
-        response = connection.send_post_request(
+        connection.send_post_request(
             _CONTACTS_SAVING_URL_PATH,
             contacts_batch_data,
             )
-        responses.append(response)
-
-    return [response["vid"] for response in responses]
 
 
 def create_contact(contact, connection):
