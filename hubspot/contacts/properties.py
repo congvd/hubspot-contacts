@@ -58,6 +58,7 @@ PROPERTY_TYPE_BY_NAME = {
 
 
 _PROPERTIES_RETRIEVAL_URL_PATH = CONTACTS_API_SCRIPT_NAME + '/properties'
+_COMPANIES_PROPERTIES_RETRIEVAL_URL_PATH = '/properties/v1/companies/properties'
 
 
 def get_all_properties(connection):
@@ -76,6 +77,30 @@ def get_all_properties(connection):
 
     properties_data = \
         connection.send_get_request(_PROPERTIES_RETRIEVAL_URL_PATH)
+    GET_ALL_PROPERTIES_RESPONSE_SCHEMA(properties_data)
+
+    properties = []
+    for property_data in properties_data:
+        property_ = _build_property_from_data(property_data)
+        properties.append(property_)
+    return properties
+
+def get_all_companies_properties(connection):
+    """
+    Get the meta-information for all the properties in the portal.
+
+    :rtype: :class:`list` of :class:`Property` specialization instances
+    :raises hubspot.connection.exc.HubspotException:
+
+    End-point documentation:
+    http://developers.hubspot.com/docs/methods/contacts/get_properties
+
+    """
+    from hubspot.contacts._schemas.properties import \
+        GET_ALL_PROPERTIES_RESPONSE_SCHEMA
+
+    properties_data = \
+        connection.send_get_request(_COMPANIES_PROPERTIES_RETRIEVAL_URL_PATH)
     GET_ALL_PROPERTIES_RESPONSE_SCHEMA(properties_data)
 
     properties = []

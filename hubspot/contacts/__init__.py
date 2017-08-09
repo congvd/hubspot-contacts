@@ -19,12 +19,12 @@ from itertools import chain
 from pyrecord import Record
 
 from hubspot.contacts._constants import BATCH_SAVING_SIZE_LIMIT
-from hubspot.contacts._constants import CONTACTS_API_SCRIPT_NAME
-from hubspot.contacts._property_utils import get_property_type_by_property_name
+from hubspot.contacts._constants import CONTACTS_API_SCRIPT_NAME, COMPANIES_API_SCRIPT_NAME
+from hubspot.contacts._property_utils import get_property_type_by_property_name, get_property_type_by_property_name_companies
 from hubspot.contacts.generic_utils import ipaginate
 from hubspot.contacts.request_data_formatters.contacts import \
     format_contact_data_for_saving, format_contacts_data_for_saving, \
-    format_contact_properties_for_saving
+    format_contact_properties_for_saving, format_company_data_for_saving
 
 
 Contact = Record.create_type(
@@ -36,10 +36,17 @@ Contact = Record.create_type(
     related_contact_vids=(),
     )
 
+Company = Record.create_type(
+    'Company',
+    'properties',
+    )
+
 
 _CONTACTS_SAVING_URL_PATH = CONTACTS_API_SCRIPT_NAME + '/contact/batch/'
 _CONTACT_CREATING_URL_PATH = CONTACTS_API_SCRIPT_NAME + '/contact/'
 _CONTACT_UPDATING_URL_TEMPLATE = CONTACTS_API_SCRIPT_NAME + '/contact/vid/{contact_id}/profile'
+
+_COMPANY_CREATING_URL_PATH = COMPANIES_API_SCRIPT_NAME + '/companies/'
 
 
 def save_contacts(contacts, connection):
@@ -114,3 +121,15 @@ def update_contact(contact, connection):
             path,
             properties_data,
     )
+
+def create_company(company, connection):
+    property_type_by_property_name = \
+        get_property_type_by_property_name_companies(connection)
+
+    company_data = format_company_data_for_saving(company, property_type_by_property_name)
+
+    response = connection.send_post_request(
+            _COMPANY_CREATING_URL_PATH,
+            company_data,
+            )
+    return response["companyId"]

@@ -51,6 +51,16 @@ def format_contact_data_for_saving(contact, property_type_by_property_name):
         }
     return contact_data
 
+def format_company_data_for_saving(company, property_type_by_property_name):
+    properties_data = _format_company_properties_for_saving(
+        company.properties,
+        property_type_by_property_name,
+        )
+    company_data = {
+        'properties': properties_data,
+        }
+    return company_data
+
 def format_contact_properties_for_saving(properties, property_type_by_property_name):
     properties_data = _format_contact_properties_for_saving(
             properties,
@@ -75,6 +85,20 @@ def _format_contact_properties_for_saving(
             {'property': property_name, 'value': property_value_cast}
         contact_properties_data.append(property_data)
     return contact_properties_data
+
+def _format_company_properties_for_saving(
+    company_properties,
+    property_type_by_property_name,
+    ):
+    company_properties_data = []
+    for property_name, property_value in list(company_properties.items()):
+        property_type = property_type_by_property_name[property_name]
+        property_value_cast = \
+            _serialize_property_value(property_value, property_type)
+        property_data = \
+            {'name': property_name, 'value': property_value_cast}
+        company_properties_data.append(property_data)
+    return company_properties_data
 
 
 def _serialize_property_value(property_value, property_type):

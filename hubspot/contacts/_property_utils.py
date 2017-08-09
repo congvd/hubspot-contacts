@@ -14,11 +14,17 @@
 #
 ##############################################################################
 
-from hubspot.contacts.properties import get_all_properties
+from hubspot.contacts.properties import get_all_properties, get_all_companies_properties
 
 
 def get_property_type_by_property_name(connection):
     property_definitions = get_all_properties(connection)
+    property_type_by_property_name = \
+        {p.name: type(p) for p in property_definitions}
+    return property_type_by_property_name
+
+def get_property_type_by_property_name_companies(connection):
+    property_definitions = get_all_companies_properties(connection)
     property_type_by_property_name = \
         {p.name: type(p) for p in property_definitions}
     return property_type_by_property_name
