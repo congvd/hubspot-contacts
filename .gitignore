@@ -34,3 +34,27 @@ hubspot_contacts.egg-info/
 \#*\#
 ~     
 
+build/lib/hubspot/__init__.py
+build/lib/hubspot/contacts/__init__.py
+build/lib/hubspot/contacts/_constants.py
+build/lib/hubspot/contacts/_data_retrieval.py
+build/lib/hubspot/contacts/_property_utils.py
+build/lib/hubspot/contacts/exc.py
+build/lib/hubspot/contacts/generic_utils.py
+build/lib/hubspot/contacts/lists.py
+build/lib/hubspot/contacts/properties.py
+build/lib/hubspot/contacts/property_groups.py
+build/lib/hubspot/contacts/testing.py
+build/lib/hubspot/contacts/_schemas/__init__.py
+build/lib/hubspot/contacts/_schemas/_validators.py
+build/lib/hubspot/contacts/_schemas/contacts.py
+build/lib/hubspot/contacts/_schemas/lists.py
+build/lib/hubspot/contacts/_schemas/properties.py
+build/lib/hubspot/contacts/request_data_formatters/__init__.py
+build/lib/hubspot/contacts/request_data_formatters/contacts.py
+build/lib/hubspot/contacts/request_data_formatters/properties.py
+build/lib/hubspot/contacts/request_data_formatters/property_groups.py
+build/lib/hubspot/owners/__init__.py
+build/lib/hubspot/owners/lists.py
+build/lib/hubspot/owners/test.py
+dist/hubspot_contacts-1.1.2-py3.7.egg
